@@ -1,2 +1,2 @@
-# PHP
-PHP Assignment
+# GUI
+GUI Assignment
