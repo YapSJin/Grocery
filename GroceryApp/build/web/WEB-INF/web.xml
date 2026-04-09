@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+	 version="5.0">
+
+    <!-- ================= INDEX ================= -->
+    <servlet>
+        <servlet-name>IndexServlet</servlet-name>
+        <servlet-class>controller.IndexServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>IndexServlet</servlet-name>
+        <url-pattern>/IndexServlet</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ================= LOGIN ================= -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>controller.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ================= REGISTER ================= -->
+    <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>controller.RegisterServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/RegisterServlet</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ================= PRODUCT ================= -->
+    <servlet>
+        <servlet-name>ProductServlet</servlet-name>
+        <servlet-class>controller.ProductServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ProductServlet</servlet-name>
+        <url-pattern>/ProductServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================= CART ================= -->
+    <servlet>
+        <servlet-name>CartServlet</servlet-name>
+        <servlet-class>controller.CartServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CartServlet</servlet-name>
+        <url-pattern>/CartServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================= CHECKOUT ================= -->
+    <servlet>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <servlet-class>controller.CheckoutServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <url-pattern>/CheckoutServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================= ADMIN ================= -->
+    <servlet>
+        <servlet-name>AdminLoginServlet</servlet-name>
+        <servlet-class>controller.AdminLoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AdminLoginServlet</servlet-name>
+        <url-pattern>/AdminLoginServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>controller.DashboardServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DashboardServlet</servlet-name>
+        <url-pattern>/DashboardServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>ReportServlet</servlet-name>
+        <servlet-class>controller.ReportServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ReportServlet</servlet-name>
+        <url-pattern>/ReportServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>controller.LogoutServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+</web-app>
