@@ -1,9 +1,3 @@
-<%-- 
-    Document   : addProduct
-    Created on : Mar 29, 2026, 4:45:05 PM
-    Author     : sengy
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -29,7 +23,7 @@
 
                     <div class="card-body">
 
-                        <form action="../ProductServlet" method="post">
+                        <form action="${pageContext.request.contextPath}/ProductServlet" method="post">
 
                             <div class="mb-3">
                                 <label>Product Name</label>

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : adminLogin
-    Created on : Mar 29, 2026, 4:44:41 PM
-    Author     : sengy
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

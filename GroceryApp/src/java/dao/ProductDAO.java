@@ -40,6 +40,21 @@ public class ProductDAO {
         return list;
     }
     
+    public static int countProducts() {
+        int count = 0;
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM Product";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+    
     public static void addProduct(String name, double price, int stock, String description) {
 
     try (Connection con = DBConnection.getConnection()) {

@@ -4,6 +4,8 @@
  */
 package dao;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import model.Customer;
 
 /**
@@ -74,5 +76,46 @@ public class CustomerDAO {
         }
 
         return false;
+    }
+
+    public static List<Customer> getAllCustomers() {
+        List<Customer> customers = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "SELECT * FROM CUSTOMER ORDER BY CUSTOMER_ID";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                customers.add(new Customer(
+                    rs.getInt("CUSTOMER_ID"),
+                    rs.getString("NAME"),
+                    rs.getString("EMAIL"),
+                    rs.getString("PASSWORD"),
+                    rs.getString("ADDRESS"),
+                    rs.getString("PHONE")
+                ));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
+
+    public static int countCustomers() {
+        int count = 0;
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM CUSTOMER";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
     }
 }

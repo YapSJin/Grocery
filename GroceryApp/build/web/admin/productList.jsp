@@ -1,9 +1,3 @@
-<%-- 
-    Document   : productList
-    Created on : Mar 29, 2026, 4:44:57 PM
-    Author     : sengy
---%>
-
 <%@ page import="java.util.*,model.Product" %>
 <!DOCTYPE html>
 <html>
@@ -17,9 +11,15 @@
 
 <div class="container mt-5">
 
-    <h2 class="mb-4">Product Management</h2>
-
-    <a href="addProduct.jsp" class="btn btn-success mb-3">+ Add Product</a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="${pageContext.request.contextPath}/admin/dashboard.jsp" class="btn btn-secondary">
+            &larr; Back to Dashboard
+        </a>
+        <h2 class="mb-0">Product Management</h2>
+        <a href="${pageContext.request.contextPath}/admin/addProduct.jsp" class="btn btn-success">
+            + Add Product
+        </a>
+    </div>
 
     <table class="table table-bordered table-hover">
 
@@ -52,7 +52,7 @@ if (products != null && !products.isEmpty()) {
             <td>
 
                 <!-- DELETE -->
-                <a href="../ProductServlet?action=delete&id=<%= p.getId() %>"
+                <a href="${pageContext.request.contextPath}/ProductServlet?action=delete&id=<%= p.getId() %>"
                    class="btn btn-danger btn-sm"
                    onclick="return confirm('Delete this product?');">
                     Delete

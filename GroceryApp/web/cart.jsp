@@ -19,7 +19,11 @@
 
 <div class="container mt-5">
 
-    <h2>Your Cart</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="IndexServlet" class="btn btn-secondary">Back</a>
+        <h2 class="mb-0">Your Cart</h2>
+        <div></div>
+    </div>
 
     <%
         Map<Product, Integer> cartItems =

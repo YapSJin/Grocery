@@ -21,9 +21,15 @@
     
     <div class="container mt-5">
 
-        <h2 class="mb-4">All Products</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="IndexServlet" class="btn btn-secondary">
+                Back
+            </a>
+            <h2 class="mb-0">All Products</h2>
+            <div></div>
+        </div>
         
-        <form action="ProductServlet" method="get" class="d-flex">
+        <form action="ProductServlet" method="get" class="d-flex mb-4">
             <input type="text" name="keyword" class="form-control me-2" placeholder="Search...">
             <button class="btn btn-outline-primary">Search</button>
         </form>

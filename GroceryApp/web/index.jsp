@@ -32,12 +32,20 @@ int count = (cart == null) ? 0 : cart.getItems().size();
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="IndexServlet">Grocery Store</a>
+        <a class="navbar-brand d-flex align-items-center" href="IndexServlet">
+            <img src="${pageContext.request.contextPath}/assets/logo.png" alt="Grocery Store Logo" style="height:40px; width:auto; margin-right:10px;">
+            Grocery Store
+        </a>
 
         <div>
             <a class="btn btn-light" href="ProductServlet">Products</a>
             <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
-            <a class="btn btn-light" href="LoginServlet">Login</a>
+            <% if (user != null) { %>
+                <a class="btn btn-light" href="UserOrderServlet">My Orders</a>
+                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
+            <% } else { %>
+                <a class="btn btn-light" href="LoginServlet">Login</a>
+            <% } %>
             <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
         </div>
     </div>

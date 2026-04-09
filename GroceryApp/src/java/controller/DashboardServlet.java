@@ -6,6 +6,9 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import dao.CustomerDAO;
+import dao.OrderDAO;
+import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -64,6 +67,13 @@ public class DashboardServlet extends HttpServlet {
             response.sendRedirect("AdminLoginServlet");
             return;
         }
+
+        int totalProducts = ProductDAO.countProducts();
+        int totalCustomers = CustomerDAO.countCustomers();
+        int totalOrders = OrderDAO.countOrders();
+        request.setAttribute("totalProducts", totalProducts);
+        request.setAttribute("totalCustomers", totalCustomers);
+        request.setAttribute("totalOrders", totalOrders);
 
         request.getRequestDispatcher("admin/dashboard.jsp").forward(request, response);
     }

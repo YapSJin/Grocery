@@ -1,0 +1,228 @@
+:root {
+    --admin-primary-color: #1b6b3a;
+    --admin-secondary-color: #f39c12;
+    --admin-accent-color: #27ae60;
+    --admin-light-bg: #f5f9f7;
+    --admin-chart-grid-color-light: rgba(0, 0, 0, 0.1);
+    --admin-chart-tick-color-light: rgba(0, 0, 0, 0.7);
+    --admin-chart-label-color-light: rgba(0, 0, 0, 0.9);
+}
+
+[data-bs-theme="dark"] {
+    --admin-primary-color: #27ae60;
+    /* Lighter primary for dark mode */
+    --admin-chart-grid-color-dark: rgba(255, 255, 255, 0.15);
+    --admin-chart-tick-color-dark: rgba(255, 255, 255, 0.7);
+    --admin-chart-label-color-dark: rgba(255, 255, 255, 0.9);
+}
+
+/* Override Bootstrap navbar */
+.navbar.navbar-dark.bg-dark {
+    background-color: #1b6b3a !important;
+    padding-top: 0.9rem !important;
+    padding-bottom: 0.9rem !important;
+}
+
+/* Override Bootstrap button colors */
+.btn-outline-primary {
+    color: #1b6b3a;
+    border-color: #1b6b3a;
+}
+
+.btn-outline-primary:hover {
+    background-color: #1b6b3a;
+    border-color: #1b6b3a;
+    color: #fff;
+}
+
+.btn-outline-success {
+    color: #27ae60;
+    border-color: #27ae60;
+}
+
+.btn-outline-success:hover {
+    background-color: #27ae60;
+    border-color: #27ae60;
+    color: #fff;
+}
+
+.btn-outline-warning {
+    color: #f39c12;
+    border-color: #f39c12;
+}
+
+.btn-outline-warning:hover {
+    background-color: #f39c12;
+    border-color: #f39c12;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #e74c3c !important;
+    border-color: #e74c3c !important;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b !important;
+    border-color: #c0392b !important;
+}
+
+/* Override card background colors */
+.bg-primary {
+    background-color: #1b6b3a !important;
+}
+
+.bg-success {
+    background-color: #27ae60 !important;
+}
+
+.bg-light {
+    background-color: #f5f9f7 !important;
+}
+
+/* Sidebar styling with grocery theme */
+.sidebar {
+    background-color: #f5f9f7 !important;
+    border-left: 4px solid #1b6b3a;
+}
+
+.sidebar h5 {
+    color: #1b6b3a !important;
+    font-weight: 700;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: var(--bs-tertiary-bg);
+    /* Use theme-aware background */
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    height: fit-content;
+    position: sticky;
+    top: 1rem;
+    border-left: 4px solid #1b6b3a;
+}
+
+.sidebar .nav-link {
+    color: var(--bs-body-color);
+    /* Use theme-aware text color */
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.375rem;
+    margin-bottom: 0.25rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar .nav-link i {
+    width: 1em;
+    text-align: center;
+    color: var(--bs-secondary-color);
+    /* Use theme-aware secondary text color */
+    transition: color 0.2s ease;
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: #1b6b3a;
+    font-weight: 500;
+}
+
+.sidebar .nav-link.active i {
+    color: #fff;
+}
+
+.sidebar .nav-link:hover:not(.active) {
+    background-color: #f5f9f7;
+    /* Theme-aware hover background */
+    color: #1b6b3a;
+    /* Theme-aware hover text */
+}
+
+.sidebar .nav-link:hover:not(.active) i {
+    color: #1b6b3a;
+}
+
+.sidebar h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #1b6b3a;
+    color: #1b6b3a;
+    font-weight: 700;
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    height: 40vh;
+    min-height: 300px;
+    width: 100%;
+    max-width: 850px;
+    margin: 1.5rem auto;
+}
+
+/* Summary Card */
+.card {
+    background-color: var(--bs-card-bg);
+}
+
+.card-icon {
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+
+/* Tables */
+.table td:last-child {
+    white-space: nowrap;
+}
+
+.action-btn {
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.action-btn i {
+    pointer-events: none;
+}
+
+.table-responsive {
+    margin-top: 1rem;
+}
+
+.table thead th {
+    background-color: var(--bs-tertiary-bg);
+    border-bottom-width: 2px;
+}
+
+/* Buttons */
+.btn-add i {
+    margin-right: 0.3rem;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.8em;
+    padding: 0.4em 0.6em;
+}
+
+[data-bs-theme="dark"] .badge.bg-warning {
+    color: #000 !important;
+}
+
+[data-bs-theme="dark"] .badge.bg-light {
+    color: #000 !important;
+}
+
+/* Toast Container */
+.toast-container {
+    z-index: 1100;
+}
+
+/* Toast Container */
+.toast-container {
+    z-index: 1100;
+}
+
