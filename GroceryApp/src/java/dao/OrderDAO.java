@@ -96,4 +96,44 @@ public class OrderDAO {
         }
         return count;
     }
+
+    public static Order getOrderById(int orderId) {
+        Order order = null;
+
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "SELECT o.ORDER_ID, o.CUSTOMER_ID, c.EMAIL AS CUSTOMER_EMAIL, o.TOTAL, o.STATUS, o.ORDER_DATE " +
+                         "FROM ORDERS o LEFT JOIN CUSTOMER c ON o.CUSTOMER_ID = c.CUSTOMER_ID " +
+                         "WHERE o.ORDER_ID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                order = new Order(
+                    rs.getInt("ORDER_ID"),
+                    rs.getInt("CUSTOMER_ID"),
+                    rs.getString("CUSTOMER_EMAIL"),
+                    rs.getDouble("TOTAL"),
+                    rs.getString("STATUS"),
+                    rs.getTimestamp("ORDER_DATE")
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return order;
+    }
+
+    public static void deleteOrder(int orderId) {
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "DELETE FROM ORDERS WHERE ORDER_ID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

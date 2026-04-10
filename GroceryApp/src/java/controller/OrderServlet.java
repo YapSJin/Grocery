@@ -27,6 +27,16 @@ public class OrderServlet extends HttpServlet {
         }
 
         String view = request.getParameter("view");
+        String action = request.getParameter("action");
+        
+        if ("edit".equals(action)) {
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
+            Order order = OrderDAO.getOrderById(orderId);
+            request.setAttribute("order", order);
+            request.getRequestDispatcher("admin/editOrder.jsp").forward(request, response);
+            return;
+        }
+        
         List<Order> orders = OrderDAO.getAllOrders();
         request.setAttribute("orders", orders);
 
@@ -47,6 +57,14 @@ public class OrderServlet extends HttpServlet {
         }
 
         int orderId = Integer.parseInt(request.getParameter("orderId"));
+        String action = request.getParameter("action");
+        
+        if ("delete".equals(action)) {
+            OrderDAO.deleteOrder(orderId);
+            response.sendRedirect("OrderServlet?view=admin");
+            return;
+        }
+        
         String status = request.getParameter("status");
         OrderDAO.updateOrderStatus(orderId, status);
 

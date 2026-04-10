@@ -25,6 +25,7 @@
                             <th>Total (RM)</th>
                             <th>Status</th>
                             <th>Order Date</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,24 +39,27 @@
                             <td><%= order.getCustomerId() %></td>
                             <td><%= order.getCustomerEmail() != null ? order.getCustomerEmail() : "-" %></td>
                             <td><%= order.getTotal() %></td>
+                            <td><%= order.getStatus() %></td>
+                            <td><%= order.getOrderDate() != null ? order.getOrderDate() : "-" %></td>
                             <td>
-                                <form action="OrderServlet" method="post" class="mb-0">
+                                <form action="OrderServlet" method="get" style="display:inline;">
                                     <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
-                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                                        <option value="Packaging" <%= "Packaging".equalsIgnoreCase(order.getStatus()) ? "selected" : "" %>>Packaging</option>
-                                        <option value="Shipping" <%= "Shipping".equalsIgnoreCase(order.getStatus()) ? "selected" : "" %>>Shipping</option>
-                                        <option value="Completed" <%= "Completed".equalsIgnoreCase(order.getStatus()) ? "selected" : "" %>>Completed</option>
-                                    </select>
+                                    <input type="hidden" name="action" value="edit">
+                                    <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                                </form>
+                                <form action="OrderServlet" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this order?');">
+                                    <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
                             </td>
-                            <td><%= order.getOrderDate() != null ? order.getOrderDate() : "-" %></td>
                         </tr>
                         <%
                                 }
                             } else {
                         %>
                         <tr>
-                            <td colspan="6" class="text-center">No orders found.</td>
+                            <td colspan="7" class="text-center">No orders found.</td>
                         </tr>
                         <%
                             }
