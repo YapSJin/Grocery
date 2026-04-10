@@ -26,26 +26,54 @@ int count = (cart == null) ? 0 : cart.getItems().size();
 
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS overrides -->
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+        .footer-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+        .page-content {
+            flex: 1;
+            padding-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="IndexServlet">
-            <img src="${pageContext.request.contextPath}/assets/logo.png" alt="Grocery Store Logo" style="height:40px; width:auto; margin-right:10px;">
+        <a class="navbar-brand" href="IndexServlet">
+            <img src="<%= request.getContextPath() %>/Image/logo.jpg" alt="Grocery Store Logo" height="40" class="me-2">
             Grocery Store
         </a>
 
         <div>
             <a class="btn btn-light" href="ProductServlet">Products</a>
             <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
-            <% if (user != null) { %>
-                <a class="btn btn-light" href="UserOrderServlet">My Orders</a>
-                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
-            <% } else { %>
-                <a class="btn btn-light" href="LoginServlet">Login</a>
-            <% } %>
+            <a class="btn btn-light" href="LoginServlet">Login</a>
             <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
         </div>
     </div>
@@ -122,7 +150,7 @@ if (products != null && !products.isEmpty()) {
 </div>
 
 <!-- FOOTER -->
-<footer class="bg-dark text-white text-center p-3 mt-5">
+<footer class="bg-dark text-white text-center p-3 footer-fixed">
     &copy; 2026 Grocery Store
 </footer>
 
