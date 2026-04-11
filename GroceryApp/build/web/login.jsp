@@ -83,7 +83,12 @@ int count = (cart == null) ? 0 : cart.getItems().size();
         <div>
             <a class="btn btn-light" href="ProductServlet">Products</a>
             <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
-            <a class="btn btn-light" href="LoginServlet">Login</a>
+            <% if (user != null) { %>
+                <a class="btn btn-light" href="UserOrderServlet">Orders</a>
+                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
+            <% } else { %>
+                <a class="btn btn-light" href="LoginServlet">Login</a>
+            <% } %>
             <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
         </div>
     </div>

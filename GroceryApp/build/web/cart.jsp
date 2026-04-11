@@ -22,7 +22,14 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="IndexServlet" class="btn btn-secondary">Back</a>
         <h2 class="mb-0">Your Cart</h2>
-        <div></div>
+        <div>
+            <%
+                model.Customer currentUser = (model.Customer) session.getAttribute("user");
+                if (currentUser != null) {
+            %>
+                <a href="UserOrderServlet" class="btn btn-outline-primary me-2">My Orders</a>
+            <% } %>
+        </div>
     </div>
 
     <%
@@ -37,6 +44,7 @@
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
+                <th>Product Image</th>
                 <th>Name</th>
                 <th>Price (RM)</th>
                 <th>Quantity</th>
@@ -55,32 +63,41 @@
         %>
 
         <tr>
+            <td>
+                <% if (p.getImage() != null && !p.getImage().isEmpty()) { %>
+                    <img src="${pageContext.request.contextPath}/<%= p.getImage() %>" alt="<%= p.getName() %>" style="width: 50px; height: 50px; object-fit: cover;">
+                <% } else { %>
+                    <span class="text-muted">No image</span>
+                <% } %>
+            </td>
             <td><%= p.getName() %></td>
             <td><%= p.getPrice() %></td>
             <td><%= qty %></td>
             <td><%= subtotal %></td>
-            <td>
+            <td class="align-middle">
 
-            <!-- UPDATE FORM -->
-            <form action="CartServlet" method="post" class="d-flex mb-1">
+            <div class="d-flex align-items-center">
+                <!-- UPDATE FORM -->
+                <form action="CartServlet" method="post" class="d-flex me-2 mb-0">
 
-                <input type="hidden" name="id" value="<%= p.getId() %>">
+                    <input type="hidden" name="id" value="<%= p.getId() %>">
 
-                <input type="number" name="qty" value="<%= qty %>" min="1" class="form-control me-2" style="width:80px">
+                    <input type="number" name="qty" value="<%= qty %>" min="1" class="form-control me-2" style="width:80px">
 
-                <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="action" value="update">
 
-                <button class="btn btn-warning btn-sm me-2">Update</button>
-            </form>
+                    <button class="btn btn-warning btn-sm">Update</button>
+                </form>
 
-            <!-- REMOVE FORM -->
-            <form action="CartServlet" method="post">
+                <!-- REMOVE FORM -->
+                <form action="CartServlet" method="post" class="mb-0">
 
-                <input type="hidden" name="id" value="<%= p.getId() %>">
-                <input type="hidden" name="action" value="remove">
+                    <input type="hidden" name="id" value="<%= p.getId() %>">
+                    <input type="hidden" name="action" value="remove">
 
-                <button class="btn btn-danger btn-sm">Remove</button>
-            </form>
+                    <button class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </div>
 
             </td>
         </tr>

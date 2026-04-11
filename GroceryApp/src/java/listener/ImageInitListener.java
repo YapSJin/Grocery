@@ -9,29 +9,31 @@ import java.util.logging.*;
 @WebListener
 public class ImageInitListener implements ServletContextListener {
     
-    private static final String PERMANENT_IMAGE_DIR = "C:\\Users\\Reynold\\Downloads\\GroceryApp\\web\\Image";
     private static final Logger logger = Logger.getLogger(ImageInitListener.class.getName());
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-        String deploymentPath = context.getRealPath("/Images");
+        String deploymentPath = context.getRealPath("/assets");
         
-        logger.info("Application starting - initializing product images");
+        // Try to find the permanent project source directory
+        String projectRoot = System.getProperty("user.dir");
+        String permanentImagePath = projectRoot + File.separator + "web" + File.separator + "assets";
+        
+        logger.info("Application starting - initializing product images in /assets");
         
         try {
-            // Create directories if they don't exist
+            // Create deployment directory if it doesn't exist
             File deploymentDir = new File(deploymentPath);
             if (!deploymentDir.exists()) {
                 deploymentDir.mkdirs();
                 logger.info("Created deployment image directory: " + deploymentPath);
             }
             
-            File permanentDir = new File(PERMANENT_IMAGE_DIR);
+            File permanentDir = new File(permanentImagePath);
             if (!permanentDir.exists()) {
-                permanentDir.mkdirs();
-                logger.info("Created permanent image directory: " + PERMANENT_IMAGE_DIR);
-                return; // No images to copy yet
+                logger.warning("Permanent image directory not found: " + permanentImagePath);
+                return; // Nothing to copy
             }
             
             // Copy all images from permanent to deployment directory

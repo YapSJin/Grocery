@@ -76,7 +76,12 @@ int count = (cart == null) ? 0 : cart.getItems().size();
         <div>
             <a class="btn btn-light" href="ProductServlet">Products</a>
             <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
-            <a class="btn btn-light" href="LoginServlet">Login</a>
+            <% if (user != null) { %>
+                <a class="btn btn-light" href="UserOrderServlet">Orders</a>
+                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
+            <% } else { %>
+                <a class="btn btn-light" href="LoginServlet">Login</a>
+            <% } %>
             <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
         </div>
     </div>
@@ -103,7 +108,11 @@ int count = (cart == null) ? 0 : cart.getItems().size();
 
         <div class="col-md-4 mb-4">
             <div class="card shadow h-100">
-
+                <% if (p.getImage() != null && !p.getImage().isEmpty()) { %>
+                    <img src="${pageContext.request.contextPath}/<%= p.getImage() %>" class="card-img-top" alt="<%= p.getName() %>" style="height: 200px; object-fit: cover;">
+                <% } else { %>
+                    <div class="bg-secondary text-white text-center py-5">No Image</div>
+                <% } %>
                 <div class="card-body">
                     <h5 class="card-title"><%= p.getName() %></h5>
 

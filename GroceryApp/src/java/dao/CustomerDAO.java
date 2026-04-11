@@ -118,4 +118,56 @@ public class CustomerDAO {
         }
         return count;
     }
+
+    public static Customer getCustomerById(int id) {
+        Customer customer = null;
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "SELECT * FROM CUSTOMER WHERE CUSTOMER_ID=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                customer = new Customer(
+                    rs.getInt("CUSTOMER_ID"),
+                    rs.getString("NAME"),
+                    rs.getString("EMAIL"),
+                    rs.getString("PASSWORD"),
+                    rs.getString("ADDRESS"),
+                    rs.getString("PHONE")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
+    public static boolean updateCustomer(int id, String name, String email, String password, String address, String phone) {
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "UPDATE CUSTOMER SET NAME=?, EMAIL=?, PASSWORD=?, ADDRESS=?, PHONE=? WHERE CUSTOMER_ID=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            ps.setString(4, address);
+            ps.setString(5, phone);
+            ps.setInt(6, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deleteCustomer(int id) {
+        try (Connection con = DBConnection.getConnection()) {
+            String sql = "DELETE FROM CUSTOMER WHERE CUSTOMER_ID=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

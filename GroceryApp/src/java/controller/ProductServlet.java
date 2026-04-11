@@ -14,12 +14,28 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  *
  * @author sengy
  */
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+    maxFileSize = 1024 * 1024 * 10,      // 10 MB
+    maxRequestSize = 1024 * 1024 * 100   // 100 MB
+)
 public class ProductServlet extends HttpServlet {
+
+    @Override
+    public void init() throws ServletException {
+        ProductDAO.checkAndAddImageColumn();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -60,35 +76,39 @@ public class ProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
-        String action = request.getParameter("action");
+        try {
+            String action = request.getParameter("action");
 
-        if ("delete".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            ProductDAO.deleteProduct(id);
-            response.sendRedirect("ProductServlet?view=admin");
-            return;
-        }
+            if ("delete".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                ProductDAO.deleteProduct(id);
+                response.sendRedirect("ProductServlet?view=admin&deleted=1");
+                return;
+            }
 
-        String keyword = request.getParameter("keyword");
+            String keyword = request.getParameter("keyword");
 
-List<Product> products;
+            List<Product> products;
 
-if (keyword != null && !keyword.isEmpty()) {
-    products = ProductDAO.searchProducts(keyword);  // 🔥 search
-} else {
-    products = ProductDAO.getAllProducts();         // 🔥 default
-}
+            if (keyword != null && !keyword.isEmpty()) {
+                products = ProductDAO.searchProducts(keyword);  // 🔥 search
+            } else {
+                products = ProductDAO.getAllProducts();         // 🔥 default
+            }
 
-request.setAttribute("products", products);
-        request.setAttribute("products", products);
+            request.setAttribute("products", products);
 
-        // 🔥 IMPORTANT: decide which page
-        String view = request.getParameter("view");
+            // 🔥 IMPORTANT: decide which page
+            String view = request.getParameter("view");
 
-        if ("admin".equals(view)) {
-            request.getRequestDispatcher("admin/productList.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("products.jsp").forward(request, response);
+            if ("admin".equals(view)) {
+                request.getRequestDispatcher("admin/productList.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("products.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException(e);
         }
     }
 
@@ -104,15 +124,90 @@ request.setAttribute("products", products);
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
-        String name = request.getParameter("name");
-        double price = Double.parseDouble(request.getParameter("price"));
-        int stock = Integer.parseInt(request.getParameter("stock"));
-        String description = request.getParameter("description");
+        // Ensure database column exists
+        ProductDAO.checkAndAddImageColumn();
 
-        ProductDAO.addProduct(name, price, stock, description);
+        try {
+            String name = request.getParameter("name");
+            String priceStr = request.getParameter("price");
+            String stockStr = request.getParameter("stock");
+            String description = request.getParameter("description");
 
-        // 🔥 FIX
-        response.sendRedirect("ProductServlet?view=admin");
+            if (name == null || priceStr == null || stockStr == null) {
+                throw new ServletException("Missing required parameters");
+            }
+
+            double price = Double.parseDouble(priceStr);
+            int stock = Integer.parseInt(stockStr);
+
+            // Image upload handling
+            Part part = request.getPart("image");
+            String imagePath = "";
+            
+            if (part != null && part.getSize() > 0) {
+                String fileName = getFileName(part);
+                if (fileName != null && !fileName.isEmpty()) {
+                    // 1. Save to Deployment Directory (Immediate visibility)
+                    String uploadPath = getServletContext().getRealPath("/assets");
+                    if (uploadPath == null) {
+                        uploadPath = getServletContext().getRealPath("") + File.separator + "assets";
+                    }
+                    
+                    File uploadDir = new File(uploadPath);
+                    if (!uploadDir.exists()) uploadDir.mkdirs();
+
+                    String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+                    File fileToSave = new File(uploadDir, uniqueFileName);
+                    
+                    try (InputStream input = part.getInputStream()) {
+                        Files.copy(input, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    
+                    // 2. Try to save to Source Directory (Persistence across clean/build)
+                    try {
+                        String projectRoot = System.getProperty("user.dir");
+                        // In NetBeans, user.dir is often the project root when running tests, 
+                        // but during deployment it might be different. 
+                        // We'll try to find 'web/assets' relative to project root.
+                        String permanentPath = projectRoot + File.separator + "web" + File.separator + "assets";
+                        File permanentDir = new File(permanentPath);
+                        if (permanentDir.exists() || permanentDir.mkdirs()) {
+                            File fileToPermanent = new File(permanentDir, uniqueFileName);
+                            Files.copy(fileToSave.toPath(), fileToPermanent.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Could not save to permanent storage: " + e.getMessage());
+                        // Non-fatal, image is already in deployment dir
+                    }
+                    
+                    imagePath = "assets/" + uniqueFileName;
+                }
+            }
+
+            ProductDAO.addProduct(name, price, stock, description, imagePath);
+            // Redirect back with success message
+            response.sendRedirect("ProductServlet?view=admin&success=1");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException(e);
+        }
+    }
+
+    private String getFileName(Part part) {
+        if (part == null) return null;
+        String contentDisp = part.getHeader("content-disposition");
+        if (contentDisp == null) return null;
+        
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                String name = s.substring(s.indexOf("=") + 2, s.length() - 1);
+                // Fix for IE or paths in filename
+                return new File(name).getName();
+            }
+        }
+        return null;
     }
 
     /**

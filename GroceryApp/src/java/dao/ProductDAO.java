@@ -14,6 +14,32 @@ import model.Product;
  * @author sengy
  */
 public class ProductDAO {
+
+    public static void checkAndAddImageColumn() {
+        try (Connection con = DBConnection.getConnection()) {
+            DatabaseMetaData meta = con.getMetaData();
+            try (ResultSet rs = meta.getColumns(null, "NBUSER", "PRODUCT", "IMAGE")) {
+                if (!rs.next()) {
+                    try (Statement stmt = con.createStatement()) {
+                        stmt.executeUpdate("ALTER TABLE PRODUCT ADD COLUMN image VARCHAR(255)");
+                        System.out.println("Added 'image' column to PRODUCT table.");
+                    }
+                }
+            } catch (Exception e) {
+                try (ResultSet rs = meta.getColumns(null, null, "PRODUCT", "IMAGE")) {
+                    if (!rs.next()) {
+                        try (Statement stmt = con.createStatement()) {
+                            stmt.executeUpdate("ALTER TABLE PRODUCT ADD COLUMN image VARCHAR(255)");
+                            System.out.println("Added 'image' column to PRODUCT table (no schema).");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error checking/adding 'image' column: " + e.getMessage());
+        }
+    }
+
     public static List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
 
@@ -29,7 +55,8 @@ public class ProductDAO {
                     rs.getString("name"),
                     rs.getDouble("price"),
                     rs.getInt("stock"),
-                    rs.getString("description")
+                    rs.getString("description"),
+                    rs.getString("image")
                 ));
             }
 
@@ -55,45 +82,49 @@ public class ProductDAO {
         return count;
     }
     
-    public static void addProduct(String name, double price, int stock, String description) {
+    public static void addProduct(String name, double price, int stock, String description, String image) throws Exception {
 
     try (Connection con = DBConnection.getConnection()) {
 
-        String sql = "INSERT INTO Product(name, price, stock, description) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Product(name, price, stock, description, image) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
 
         ps.setString(1, name);
         ps.setDouble(2, price);
         ps.setInt(3, stock);
         ps.setString(4, description);
+        ps.setString(5, image);
 
         ps.executeUpdate();
 
     } catch (Exception e) {
         e.printStackTrace();
+        throw e;
     }
     }
     
-    public static void updateProduct(int id, String name, double price, int stock, String description) {
+    public static void updateProduct(int id, String name, double price, int stock, String description, String image) throws Exception {
 
     try (Connection con = DBConnection.getConnection()) {
 
-        String sql = "UPDATE Product SET name=?, price=?, stock=?, description=? WHERE product_id=?";
+        String sql = "UPDATE Product SET name=?, price=?, stock=?, description=?, image=? WHERE product_id=?";
         PreparedStatement ps = con.prepareStatement(sql);
 
         ps.setString(1, name);
         ps.setDouble(2, price);
         ps.setInt(3, stock);
         ps.setString(4, description);
-        ps.setInt(5, id);
+        ps.setString(5, image);
+        ps.setInt(6, id);
 
         ps.executeUpdate();
 
     } catch (Exception e) {
         e.printStackTrace();
+        throw e;
     }
 }
-    public static void deleteProduct(int id) {
+    public static void deleteProduct(int id) throws Exception {
 
     try (Connection con = DBConnection.getConnection()) {
 
@@ -106,6 +137,7 @@ public class ProductDAO {
 
     } catch (Exception e) {
         e.printStackTrace();
+        throw e;
     }
 }
     public static Product getProductById(int id) {
@@ -126,7 +158,8 @@ public class ProductDAO {
                 rs.getString("name"),
                 rs.getDouble("price"),
                 rs.getInt("stock"),
-                rs.getString("description")
+                rs.getString("description"),
+                rs.getString("image")
             );
         }
 
@@ -154,7 +187,8 @@ public class ProductDAO {
                 rs.getString("name"),
                 rs.getDouble("price"),
                 rs.getInt("stock"),
-                rs.getString("description")
+                rs.getString("description"),
+                rs.getString("image")
             ));
         }
 

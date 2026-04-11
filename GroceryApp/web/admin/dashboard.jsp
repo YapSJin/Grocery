@@ -18,7 +18,7 @@ if (admin == null) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         
         <!-- Admin Dashboard Styles -->
-        <link href="${pageContext.request.contextPath}/styles/adminDashboard.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css/adminDashboard.css" rel="stylesheet">
     </head>
     <body>
         
@@ -26,7 +26,7 @@ if (admin == null) {
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid d-flex align-items-center">
             <span class="navbar-brand mb-0 h1">Admin Dashboard</span>
-            <img src="${pageContext.request.contextPath}/assets/logo.png" alt="Logo" style="height:40px; width:auto;" class="mx-auto">
+            <img src="${pageContext.request.contextPath}/Image/logo.jpg" alt="Logo" style="height:40px; width:auto;" class="mx-auto">
             <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-danger">Logout</a>
         </div>
     </nav>

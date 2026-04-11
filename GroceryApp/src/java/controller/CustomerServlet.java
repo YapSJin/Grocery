@@ -26,6 +26,20 @@ public class CustomerServlet extends HttpServlet {
             return;
         }
 
+        String action = request.getParameter("action");
+        if ("delete".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            CustomerDAO.deleteCustomer(id);
+            response.sendRedirect("CustomerServlet?view=admin");
+            return;
+        } else if ("edit".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Customer customer = CustomerDAO.getCustomerById(id);
+            request.setAttribute("customer", customer);
+            request.getRequestDispatcher("admin/editCustomer.jsp").forward(request, response);
+            return;
+        }
+
         String view = request.getParameter("view");
         List<Customer> customers = CustomerDAO.getAllCustomers();
         request.setAttribute("customers", customers);
@@ -34,6 +48,30 @@ public class CustomerServlet extends HttpServlet {
             request.getRequestDispatcher("admin/customers.jsp").forward(request, response);
         } else {
             response.sendRedirect("DashboardServlet");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute("admin") == null) {
+            response.sendRedirect("AdminLoginServlet");
+            return;
+        }
+
+        String action = request.getParameter("action");
+        if ("update".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String address = request.getParameter("address");
+            String phone = request.getParameter("phone");
+
+            CustomerDAO.updateCustomer(id, name, email, password, address, phone);
+            response.sendRedirect("CustomerServlet?view=admin");
         }
     }
 }

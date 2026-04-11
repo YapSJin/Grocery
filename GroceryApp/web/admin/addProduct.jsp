@@ -23,7 +23,7 @@
 
                     <div class="card-body">
 
-                        <form action="${pageContext.request.contextPath}/ProductServlet" method="post">
+                        <form action="../ProductServlet" method="post" enctype="multipart/form-data">
 
                             <div class="mb-3">
                                 <label>Product Name</label>
@@ -45,6 +45,11 @@
                                 <textarea name="description" class="form-control" rows="3"></textarea>
                             </div>
 
+                            <div class="mb-3">
+                                <label>Product Image</label>
+                                <input type="file" name="image" class="form-control" accept="image/*" required>
+                            </div>
+
                             <button class="btn btn-success w-100">Add Product</button>
 
                         </form>
@@ -63,6 +68,9 @@
         </div>
 
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

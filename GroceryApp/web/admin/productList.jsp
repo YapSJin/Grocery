@@ -12,7 +12,7 @@
 <div class="container mt-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="${pageContext.request.contextPath}/admin/dashboard.jsp" class="btn btn-secondary">
+        <a href="${pageContext.request.contextPath}/DashboardServlet" class="btn btn-secondary">
             &larr; Back to Dashboard
         </a>
         <h2 class="mb-0">Product Management</h2>
@@ -21,11 +21,26 @@
         </a>
     </div>
 
+    <% if (request.getParameter("success") != null) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Product added successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (request.getParameter("deleted") != null) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Product deleted successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
     <table class="table table-bordered table-hover">
 
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
+                <th>Image</th>
                 <th>Name</th>
                 <th>Price (RM)</th>
                 <th>Stock</th>
@@ -45,6 +60,13 @@ if (products != null && !products.isEmpty()) {
 
         <tr>
             <td><%= p.getId() %></td>
+            <td>
+                <% if (p.getImage() != null && !p.getImage().isEmpty()) { %>
+                    <img src="${pageContext.request.contextPath}/<%= p.getImage() %>" alt="<%= p.getName() %>" style="width: 50px; height: 50px; object-fit: cover;">
+                <% } else { %>
+                    <span class="text-muted">No image</span>
+                <% } %>
+            </td>
             <td><%= p.getName() %></td>
             <td><%= p.getPrice() %></td>
             <td><%= p.getStock() %></td>
@@ -76,6 +98,9 @@ if (products != null && !products.isEmpty()) {
     </table>
 
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

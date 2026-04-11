@@ -25,6 +25,7 @@
                             <th>Password</th>
                             <th>Address</th>
                             <th>Phone</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,6 +41,10 @@
                             <td><%= customer.getPassword() != null ? customer.getPassword() : "-" %></td>
                             <td><%= customer.getAddress() != null ? customer.getAddress() : "-" %></td>
                             <td><%= customer.getPhone() != null ? customer.getPhone() : "-" %></td>
+                            <td>
+                                <a href="CustomerServlet?action=edit&id=<%= customer.getCustomerId() %>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="CustomerServlet?action=delete&id=<%= customer.getCustomerId() %>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
+                            </td>
                         </tr>
                         <%
                                 }

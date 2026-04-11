@@ -12,7 +12,8 @@ CREATE TABLE Product (
     name VARCHAR(100),
     price DECIMAL(10,2),
     stock INT,
-    description VARCHAR(255)
+    description VARCHAR(255),
+    image VARCHAR(255)
 );
 
 CREATE TABLE Orders (
