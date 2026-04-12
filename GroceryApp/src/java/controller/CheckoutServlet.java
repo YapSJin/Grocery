@@ -12,6 +12,8 @@ import model.Cart;
 import model.Customer;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,6 +26,25 @@ import jakarta.servlet.http.HttpSession;
  * @author sengy
  */
 public class CheckoutServlet extends HttpServlet {
+
+    private double calculateSubtotal(Cart cart) {
+        double subtotal = 0;
+        for (Integer id : cart.getItems().keySet()) {
+            int qty = cart.getItems().get(id);
+            Product p = ProductDAO.getProductById(id);
+            if (p != null) {
+                subtotal += p.getPrice() * qty;
+            }
+        }
+        return subtotal;
+    }
+
+    private double calculateShipping(double subtotal, String deliveryType) {
+        if ("express".equals(deliveryType)) {
+            return (subtotal >= 2000) ? 0 : 50;
+        }
+        return (subtotal >= 1000) ? 0 : 25;
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -79,23 +100,35 @@ public class CheckoutServlet extends HttpServlet {
         return;
     }
 
-    double total = 0;
+    String deliveryType = request.getParameter("deliveryType");
+    if (deliveryType == null) {
+        deliveryType = (String) session.getAttribute("deliveryType");
+    }
+    if (deliveryType == null) {
+        deliveryType = "normal";
+    }
+    session.setAttribute("deliveryType", deliveryType);
 
+    double subtotal = calculateSubtotal(cart);
+    double tax = subtotal * 0.06;
+    double shipping = calculateShipping(subtotal, deliveryType);
+    double finalTotal = subtotal + tax + shipping;
+
+    Map<Product, Integer> cartItems = new LinkedHashMap<>();
     for (Integer id : cart.getItems().keySet()) {
-        int qty = cart.getItems().get(id);
         Product p = ProductDAO.getProductById(id);
-
         if (p != null) {
-            total += p.getPrice() * qty;
+            cartItems.put(p, cart.getItems().get(id));
         }
     }
 
-    double shipping = (total >= 1000) ? 0 : 25;
-    double finalTotal = total + shipping;
-
-    request.setAttribute("total", total);
+    request.setAttribute("cartItems", cartItems);
+    request.setAttribute("subtotal", subtotal);
+    request.setAttribute("tax", tax);
+    request.setAttribute("total", subtotal);
     request.setAttribute("shipping", shipping);
     request.setAttribute("finalTotal", finalTotal);
+    request.setAttribute("deliveryType", deliveryType);
 
     request.getRequestDispatcher("checkout.jsp").forward(request, response);
     }
