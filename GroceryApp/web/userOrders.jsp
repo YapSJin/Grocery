@@ -2,20 +2,54 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Order" %>
 <%@ page import="model.Customer" %>
+<%@ page import="model.Cart" %>
 <%
 Customer user = (Customer) session.getAttribute("user");
 if (user == null) {
     response.sendRedirect("LoginServlet");
     return;
 }
+
+Cart cart = (Cart) session.getAttribute("cart");
+int count = (cart == null) ? 0 : cart.getItems().size();
 %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>My Orders</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 70px;
+        }
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+    </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed">
+        <div class="container">
+            <a class="navbar-brand" href="IndexServlet">
+                <img src="<%= request.getContextPath() %>/Image/logo.jpg" alt="Grocery Store Logo" height="40" class="me-2">
+                Grocery Store
+            </a>
+
+            <div>
+                <a class="btn btn-light" href="ProductServlet">Products</a>
+                <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
+                <a class="btn btn-light" href="UserOrderServlet">Orders</a>
+                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
+                <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>My Orders</h2>

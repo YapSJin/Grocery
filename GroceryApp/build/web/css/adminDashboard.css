@@ -174,29 +174,6 @@
     opacity: 0.6;
 }
 
-/* Tables */
-.table td:last-child {
-    white-space: nowrap;
-}
-
-.action-btn {
-    margin-right: 0.25rem;
-    margin-bottom: 0.25rem;
-}
-
-.action-btn i {
-    pointer-events: none;
-}
-
-.table-responsive {
-    margin-top: 1rem;
-}
-
-.table thead th {
-    background-color: var(--bs-tertiary-bg);
-    border-bottom-width: 2px;
-}
-
 /* Buttons */
 .btn-add i {
     margin-right: 0.3rem;

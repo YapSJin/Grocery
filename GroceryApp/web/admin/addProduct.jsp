@@ -7,8 +7,18 @@
         
         <!-- Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Admin Dashboard Styles -->
+        <link href="${pageContext.request.contextPath}/css/adminDashboard.css" rel="stylesheet">
     </head>
     <body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid d-flex align-items-center">
+            <span class="navbar-brand mb-0 h1">Admin Dashboard</span>
+            <img src="${pageContext.request.contextPath}/Image/logo.jpg" alt="Logo" style="height:40px; width:auto;" class="mx-auto">
+            <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-danger">Logout</a>
+        </div>
+    </nav>
 
     <div class="container mt-5">
 
@@ -23,7 +33,7 @@
 
                     <div class="card-body">
 
-                        <form action="../ProductServlet" method="post" enctype="multipart/form-data">
+                        <form action="${pageContext.request.contextPath}/ProductServlet" method="post" enctype="multipart/form-data">
 
                             <div class="mb-3">
                                 <label>Product Name</label>

@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.OrderDAO;
 import dao.ReportDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +13,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
+import model.Order;
 
 /**
  *
@@ -71,7 +74,10 @@ public class ReportServlet extends HttpServlet {
             report = ReportDAO.getDailyReport(); // default
         }
 
+        List<Order> orders = OrderDAO.getAllOrders();
+
         request.setAttribute("report", report);
+        request.setAttribute("orders", orders);
         request.getRequestDispatcher("admin/report.jsp").forward(request, response);
     }
 

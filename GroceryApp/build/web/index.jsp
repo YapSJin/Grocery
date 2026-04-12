@@ -38,7 +38,6 @@ int count = (cart == null) ? 0 : cart.getItems().size();
             flex-direction: column;
             min-height: 100vh;
             padding-top: 70px;
-            padding-bottom: 70px;
         }
         .navbar-fixed {
             position: fixed;
@@ -48,15 +47,12 @@ int count = (cart == null) ? 0 : cart.getItems().size();
             z-index: 1030;
         }
         .footer-fixed {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
+            margin-top: auto;
         }
         .page-content {
             flex: 1;
             padding-top: 20px;
+            padding-bottom: 20px;
         }
     </style>
 </head>
@@ -84,18 +80,19 @@ int count = (cart == null) ? 0 : cart.getItems().size();
     </div>
 </nav>
 
-<!-- HERO -->
-<div class="container mt-4">
-    <div class="p-4 bg-light rounded">
-        <h1>Welcome to Grocery Store</h1>
-        <p>Fresh groceries delivered to your door.</p>
-        <a href="ProductServlet" class="btn btn-primary">Shop Now</a>
+<div class="page-content">
+    <!-- HERO -->
+    <div class="container mt-4">
+        <div class="p-4 bg-light rounded">
+            <h1>Welcome to Grocery Store</h1>
+            <p>Fresh groceries delivered to your door.</p>
+            <a href="ProductServlet" class="btn btn-primary">Shop Now</a>
+        </div>
     </div>
-</div>
 
-<!-- FEATURED PRODUCTS -->
-<div class="container mt-5">
-    <h2>Featured Products</h2>
+    <!-- FEATURED PRODUCTS -->
+    <div class="container mt-5">
+        <h2>Featured Products</h2>
 
     <div class="row">
 
@@ -147,15 +144,15 @@ if (products != null && !products.isEmpty()) {
 %>
 
     </div>
-</div>
 
-<!-- PROMOTIONS -->
-<div class="container mt-5">
-    <h3>Promotions</h3>
-    <ul>
-        <li>Free delivery above RM 1000</li>
-        <li>Festival discounts available</li>
-    </ul>
+    <!-- PROMOTIONS -->
+    <div class="container mt-5">
+        <h3>Promotions</h3>
+        <ul>
+            <li>Free delivery above RM 1000</li>
+            <li>Festival discounts available</li>
+        </ul>
+    </div>
 </div>
 
 <!-- FOOTER -->

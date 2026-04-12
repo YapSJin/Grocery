@@ -7,29 +7,61 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="model.Product" %>
+<%
+    model.Customer user = (model.Customer) session.getAttribute("user");
+    model.Cart cart = (model.Cart) session.getAttribute("cart");
+    int count = (cart == null) ? 0 : cart.getItems().size();
+%>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Cart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 70px;
+        }
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+    </style>
 </head>
 
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed">
+    <div class="container">
+        <a class="navbar-brand" href="IndexServlet">
+            <img src="<%= request.getContextPath() %>/Image/logo.jpg" alt="Grocery Store Logo" height="40" class="me-2">
+            Grocery Store
+        </a>
+
+        <div>
+            <a class="btn btn-light" href="ProductServlet">Products</a>
+            <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
+            <% if (user != null) { %>
+                <a class="btn btn-light" href="UserOrderServlet">Orders</a>
+                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
+            <% } else { %>
+                <a class="btn btn-light" href="LoginServlet">Login</a>
+            <% } %>
+            <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
+        </div>
+    </div>
+</nav>
 
 <div class="container mt-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="IndexServlet" class="btn btn-secondary">Back</a>
         <h2 class="mb-0">Your Cart</h2>
-        <div>
-            <%
-                model.Customer currentUser = (model.Customer) session.getAttribute("user");
-                if (currentUser != null) {
-            %>
-                <a href="UserOrderServlet" class="btn btn-outline-primary me-2">My Orders</a>
-            <% } %>
-        </div>
+        <div></div>
     </div>
 
     <%

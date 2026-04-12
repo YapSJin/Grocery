@@ -1,0 +1,16 @@
+<%
+String admin = (String) session.getAttribute("admin");
+
+if (admin == null) {
+    response.sendRedirect(request.getContextPath() + "/AdminLoginServlet");
+    return;
+}
+%>
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid d-flex align-items-center">
+        <span class="navbar-brand mb-0 h1">Admin Dashboard</span>
+        <img src="${pageContext.request.contextPath}/Image/logo.jpg" alt="Logo" style="height:40px; width:auto;" class="mx-auto">
+        <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-danger">Logout</a>
+    </div>
+</nav>

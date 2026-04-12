@@ -82,7 +82,21 @@ public class ProductServlet extends HttpServlet {
             if ("delete".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 ProductDAO.deleteProduct(id);
-                response.sendRedirect("ProductServlet?view=admin&deleted=1");
+                response.sendRedirect(request.getContextPath() + "/ProductServlet?view=admin&deleted=1");
+                return;
+            }
+
+            if ("edit".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Product product = ProductDAO.getProductById(id);
+
+                if (product == null) {
+                    response.sendRedirect(request.getContextPath() + "/ProductServlet?view=admin&notfound=1");
+                    return;
+                }
+
+                request.setAttribute("product", product);
+                request.getRequestDispatcher("admin/editProduct.jsp").forward(request, response);
                 return;
             }
 
@@ -128,17 +142,41 @@ public class ProductServlet extends HttpServlet {
         ProductDAO.checkAndAddImageColumn();
 
         try {
+            String action = request.getParameter("action");
+
             String name = request.getParameter("name");
             String priceStr = request.getParameter("price");
             String stockStr = request.getParameter("stock");
             String description = request.getParameter("description");
 
-            if (name == null || priceStr == null || stockStr == null) {
+            if (priceStr == null || stockStr == null) {
                 throw new ServletException("Missing required parameters");
             }
 
             double price = Double.parseDouble(priceStr);
             int stock = Integer.parseInt(stockStr);
+
+            if ("update".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String existingImage = request.getParameter("existingImage");
+                String imagePath = existingImage;
+
+                Part part = request.getPart("image");
+                if (part != null && part.getSize() > 0) {
+                    String fileName = getFileName(part);
+                    if (fileName != null && !fileName.isEmpty()) {
+                        imagePath = saveProductImage(part, fileName);
+                    }
+                }
+
+                ProductDAO.updateProduct(id, name, price, stock, description, imagePath);
+                response.sendRedirect(request.getContextPath() + "/ProductServlet?view=admin&updated=1");
+                return;
+            }
+
+            if (name == null) {
+                throw new ServletException("Missing required parameters");
+            }
 
             // Image upload handling
             Part part = request.getPart("image");
@@ -147,51 +185,51 @@ public class ProductServlet extends HttpServlet {
             if (part != null && part.getSize() > 0) {
                 String fileName = getFileName(part);
                 if (fileName != null && !fileName.isEmpty()) {
-                    // 1. Save to Deployment Directory (Immediate visibility)
-                    String uploadPath = getServletContext().getRealPath("/assets");
-                    if (uploadPath == null) {
-                        uploadPath = getServletContext().getRealPath("") + File.separator + "assets";
-                    }
-                    
-                    File uploadDir = new File(uploadPath);
-                    if (!uploadDir.exists()) uploadDir.mkdirs();
-
-                    String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
-                    File fileToSave = new File(uploadDir, uniqueFileName);
-                    
-                    try (InputStream input = part.getInputStream()) {
-                        Files.copy(input, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    }
-                    
-                    // 2. Try to save to Source Directory (Persistence across clean/build)
-                    try {
-                        String projectRoot = System.getProperty("user.dir");
-                        // In NetBeans, user.dir is often the project root when running tests, 
-                        // but during deployment it might be different. 
-                        // We'll try to find 'web/assets' relative to project root.
-                        String permanentPath = projectRoot + File.separator + "web" + File.separator + "assets";
-                        File permanentDir = new File(permanentPath);
-                        if (permanentDir.exists() || permanentDir.mkdirs()) {
-                            File fileToPermanent = new File(permanentDir, uniqueFileName);
-                            Files.copy(fileToSave.toPath(), fileToPermanent.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Could not save to permanent storage: " + e.getMessage());
-                        // Non-fatal, image is already in deployment dir
-                    }
-                    
-                    imagePath = "assets/" + uniqueFileName;
+                    imagePath = saveProductImage(part, fileName);
                 }
             }
 
             ProductDAO.addProduct(name, price, stock, description, imagePath);
             // Redirect back with success message
-            response.sendRedirect("ProductServlet?view=admin&success=1");
+            response.sendRedirect(request.getContextPath() + "/ProductServlet?view=admin&success=1");
             
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);
         }
+    }
+
+    private String saveProductImage(Part part, String fileName) throws IOException {
+        // 1. Save to Deployment Directory (Immediate visibility)
+        String uploadPath = getServletContext().getRealPath("/assets");
+        if (uploadPath == null) {
+            uploadPath = getServletContext().getRealPath("") + File.separator + "assets";
+        }
+
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+
+        String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+        File fileToSave = new File(uploadDir, uniqueFileName);
+
+        try (InputStream input = part.getInputStream()) {
+            Files.copy(input, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        // 2. Try to save to Source Directory (Persistence across clean/build)
+        try {
+            String projectRoot = System.getProperty("user.dir");
+            String permanentPath = projectRoot + File.separator + "web" + File.separator + "assets";
+            File permanentDir = new File(permanentPath);
+            if (permanentDir.exists() || permanentDir.mkdirs()) {
+                File fileToPermanent = new File(permanentDir, uniqueFileName);
+                Files.copy(fileToSave.toPath(), fileToPermanent.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (Exception e) {
+            System.err.println("Could not save to permanent storage: " + e.getMessage());
+        }
+
+        return "assets/" + uniqueFileName;
     }
 
     private String getFileName(Part part) {

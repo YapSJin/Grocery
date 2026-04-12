@@ -6,8 +6,18 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Admin Dashboard Styles -->
+    <link href="${pageContext.request.contextPath}/css/adminDashboard.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid d-flex align-items-center">
+            <span class="navbar-brand mb-0 h1">Admin Dashboard</span>
+            <img src="${pageContext.request.contextPath}/Image/logo.jpg" alt="Logo" style="height:40px; width:auto;" class="mx-auto">
+            <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-danger">Logout</a>
+        </div>
+    </nav>
 
 <div class="container mt-5">
 
@@ -31,6 +41,20 @@
     <% if (request.getParameter("deleted") != null) { %>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             Product deleted successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (request.getParameter("updated") != null) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Product updated successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (request.getParameter("notfound") != null) { %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Product not found.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <% } %>
@@ -72,6 +96,12 @@ if (products != null && !products.isEmpty()) {
             <td><%= p.getStock() %></td>
             <td><%= p.getDescription() %></td>
             <td>
+
+                <!-- EDIT -->
+                <a href="${pageContext.request.contextPath}/ProductServlet?action=edit&id=<%= p.getId() %>"
+                   class="btn btn-primary btn-sm me-1">
+                    Edit
+                </a>
 
                 <!-- DELETE -->
                 <a href="${pageContext.request.contextPath}/ProductServlet?action=delete&id=<%= p.getId() %>"
