@@ -12,8 +12,10 @@
 
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS overrides -->
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
     
     <style>
         html, body {
@@ -29,6 +31,7 @@
             background-position: center;
             background-repeat: no-repeat;
             background-color: #f8f9fa;
+            padding-bottom: 220px;
         }
         main {
             flex: 1;
@@ -75,21 +78,25 @@ int count = (cart == null) ? 0 : cart.getItems().size();
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed">
     <div class="container">
-        <a class="navbar-brand" href="IndexServlet">
+        <a class="navbar-brand" href="<%= request.getContextPath() %>/IndexServlet">
             <img src="<%= request.getContextPath() %>/Image/logo.jpg" alt="Grocery Store Logo" height="40" class="me-2">
             Grocery Store
         </a>
-
-        <div>
-            <a class="btn btn-light" href="ProductServlet">Products</a>
-            <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
-            <% if (user != null) { %>
-                <a class="btn btn-light" href="UserOrderServlet">Orders</a>
-                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
-            <% } else { %>
-                <a class="btn btn-light" href="LoginServlet">Login</a>
-            <% } %>
-            <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <div class="d-flex flex-column flex-lg-row align-items-center gap-2">
+                <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/ProductServlet">Products</a>
+                <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/CartServlet">Cart (<%= count %>)</a>
+                <% if (user != null) { %>
+                    <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/UserOrderServlet">Orders</a>
+                    <a class="btn btn-danger btn-nav" href="<%= request.getContextPath() %>/LogoutServlet">Logout</a>
+                <% } else { %>
+                    <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/LoginServlet">Login</a>
+                <% } %>
+                <a class="btn btn-outline-secondary btn-nav" href="<%= request.getContextPath() %>/AdminLoginServlet">Admin</a>
+            </div>
         </div>
     </div>
 </nav>
@@ -118,7 +125,7 @@ int count = (cart == null) ? 0 : cart.getItems().size();
                         <input type="password" name="password" class="form-control" required>
                     </div>
 
-                    <button class="btn btn-primary w-100">Login</button>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
 
                     <p class="mt-3 text-center">
                         No account? <a href="register.jsp">Register</a>
@@ -133,9 +140,27 @@ int count = (cart == null) ? 0 : cart.getItems().size();
 </main>
 
 <!-- FOOTER -->
-<footer class="bg-dark text-white text-center p-3 footer-fixed">
-    &copy; 2026 Grocery Store
+<footer class="footer-fixed">
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-4 mb-2">
+                <h6><i class="fas fa-info-circle me-2"></i>About Us</h6>
+                <p style="font-size: 0.9rem;">Quality groceries at your fingertips. Shop fresh, shop online.</p>
+            </div>
+            <div class="col-md-4 mb-2">
+                <h6><i class="fas fa-phone me-2"></i>Contact</h6>
+                <p style="font-size: 0.9rem;">Email: info@grocerystore.com<br>Phone: +60-1234567890</p>
+            </div>
+            <div class="col-md-4 mb-2">
+                <h6><i class="fas fa-globe me-2"></i>Follow Us</h6>
+                <p style="font-size: 0.9rem;"><a href="#" class="me-2">Facebook</a><a href="#" class="me-2">Twitter</a><a href="#">Instagram</a></p>
+            </div>
+        </div>
+        <hr style="opacity: 0.3;">
+        <p style="margin: 0.5rem 0;">&copy; 2026 Grocery Store. All rights reserved.</p>
+    </div>
 </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

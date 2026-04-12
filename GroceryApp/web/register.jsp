@@ -14,7 +14,7 @@
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS overrides -->
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
     
     <style>
         html, body {
@@ -30,13 +30,14 @@
             background-position: center;
             background-repeat: no-repeat;
             background-color: #f8f9fa;
+            padding-bottom: 160px;
         }
         main {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 90px 15px 90px;
+            padding: 120px 15px 80px;
         }
         .navbar-fixed {
             position: fixed;
@@ -76,21 +77,25 @@ int count = (cart == null) ? 0 : cart.getItems().size();
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed">
     <div class="container">
-        <a class="navbar-brand" href="IndexServlet">
+        <a class="navbar-brand" href="<%= request.getContextPath() %>/IndexServlet">
             <img src="<%= request.getContextPath() %>/Image/logo.jpg" alt="Grocery Store Logo" height="40" class="me-2">
             Grocery Store
         </a>
-
-        <div>
-            <a class="btn btn-light" href="ProductServlet">Products</a>
-            <a class="btn btn-light" href="CartServlet">Cart (<%= count %>)</a>
-            <% if (user != null) { %>
-                <a class="btn btn-light" href="UserOrderServlet">Orders</a>
-                <a class="btn btn-danger" href="LogoutServlet">Logout</a>
-            <% } else { %>
-                <a class="btn btn-light" href="LoginServlet">Login</a>
-            <% } %>
-            <a class="btn btn-light" href="AdminLoginServlet">Admin</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <div class="d-flex flex-column flex-lg-row align-items-center gap-2">
+                <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/ProductServlet">Products</a>
+                <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/CartServlet">Cart (<%= count %>)</a>
+                <% if (user != null) { %>
+                    <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/UserOrderServlet">Orders</a>
+                    <a class="btn btn-danger btn-nav" href="<%= request.getContextPath() %>/LogoutServlet">Logout</a>
+                <% } else { %>
+                    <a class="btn btn-outline-light btn-nav" href="<%= request.getContextPath() %>/LoginServlet">Login</a>
+                <% } %>
+                <a class="btn btn-outline-secondary btn-nav" href="<%= request.getContextPath() %>/AdminLoginServlet">Admin</a>
+            </div>
         </div>
     </div>
 </nav>
@@ -158,5 +163,4 @@ int count = (cart == null) ? 0 : cart.getItems().size();
     &copy; 2026 Grocery Store
 </footer>
 
-    </body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

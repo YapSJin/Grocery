@@ -23,11 +23,18 @@ if (admin == null) {
     <body>
         
     <!-- NAVBAR -->
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid d-flex align-items-center">
-            <span class="navbar-brand mb-0 h1">Admin Dashboard</span>
-            <img src="${pageContext.request.contextPath}/Image/logo.jpg" alt="Logo" style="height:40px; width:auto;" class="mx-auto">
-            <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-danger">Logout</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="${pageContext.request.contextPath}/admin/dashboard.jsp">
+                <img src="${pageContext.request.contextPath}/Image/logo.jpg" alt="Logo" class="me-2">
+                <span class="mb-0 h1">Admin Dashboard</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarNav" aria-controls="adminNavbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="adminNavbarNav">
+                <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-outline-light btn-nav">Logout</a>
+            </div>
         </div>
     </nav>
 

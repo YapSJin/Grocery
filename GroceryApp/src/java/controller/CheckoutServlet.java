@@ -27,6 +27,22 @@ import jakarta.servlet.http.HttpSession;
  */
 public class CheckoutServlet extends HttpServlet {
 
+    private String validateStock(Cart cart) {
+        for (Integer id : cart.getItems().keySet()) {
+            int qty = cart.getItems().get(id);
+            Product p = ProductDAO.getProductById(id);
+
+            if (p == null) {
+                return "One of the products in your cart is no longer available.";
+            }
+
+            if (qty > p.getStock()) {
+                return "Insufficient stock for " + p.getName() + ". Available: " + p.getStock();
+            }
+        }
+        return null;
+    }
+
     private double calculateSubtotal(Cart cart) {
         double subtotal = 0;
         for (Integer id : cart.getItems().keySet()) {
@@ -161,6 +177,13 @@ public class CheckoutServlet extends HttpServlet {
         return;
     }
 
+    String stockError = validateStock(cart);
+    if (stockError != null) {
+        request.setAttribute("error", stockError);
+        doGet(request, response);
+        return;
+    }
+
     Connection con = null;
 
         try {
@@ -173,6 +196,9 @@ public class CheckoutServlet extends HttpServlet {
             for (Integer id : cart.getItems().keySet()) {
                 int qty = cart.getItems().get(id);
                 Product p = ProductDAO.getProductById(id);
+                if (p == null) {
+                    throw new ServletException("Product is no longer available.");
+                }
                 total += p.getPrice() * qty;
             }
 
@@ -205,9 +231,13 @@ public class CheckoutServlet extends HttpServlet {
                 int qty = cart.getItems().get(id);
                 Product p = ProductDAO.getProductById(id);
 
+                if (p == null) {
+                    throw new ServletException("Product is no longer available.");
+                }
+
                 // ❗ Prevent negative stock
                 if (p.getStock() < qty) {
-                    throw new ServletException("Insufficient stock for " + p.getName());
+                    throw new ServletException("Insufficient stock for " + p.getName() + ". Available: " + p.getStock());
                 }
 
                 // Insert ORDERITEM
@@ -241,6 +271,13 @@ public class CheckoutServlet extends HttpServlet {
                 if (con != null) con.rollback(); // ❌ ROLLBACK
             } catch (Exception ex) {
                 ex.printStackTrace();
+            }
+
+            String message = e.getMessage();
+            if (message != null && (message.contains("Insufficient stock") || message.contains("no longer available"))) {
+                request.setAttribute("error", message);
+                doGet(request, response);
+                return;
             }
 
             throw new ServletException(e);

@@ -58,7 +58,7 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.getSession().invalidate();
-        response.sendRedirect("AdminLoginServlet");
+        response.sendRedirect("LoginServlet");
     }
 
     /**
@@ -72,7 +72,7 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
     }
 
     /**
